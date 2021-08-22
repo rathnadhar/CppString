@@ -42,6 +42,49 @@ namespace rathna
         return anvil.end();
     }
 
+    /// Set the string length to zero.
+    void cppstring::clear()
+    {
+        this->anvil.clear();
+    }
+
+    /// First set all the character in the sting to 0x0
+    /// and then set the size of the string to zero.
+    /// This ensures that clear() does not leave arbitary code in the memory
+    void cppstring::wipe()
+    {
+        auto index = this->anvil.begin();
+        auto end = this->anvil.end();
+
+        // Convert to upper: clear the '32' bit, 0x20 in hex. And with the
+        // inverted bit string (~).
+        while(index != end)
+        {
+            *index = 0x0;
+            ++index;
+        }
+    }
+
+    /// Returns the number of characters in the string.
+    size_t cppstring::length() const
+    {
+       return (this->anvil.length());
+    }
+
+    /// Add string or char to the end of the string
+    /// The stirng size is increased accordingly.
+    void cppstring::append(const char in_char)
+    {
+        this->anvil.append(&in_char);
+    }
+
+    /// Requests that the buffer capacity be reserved for planned change in size to a length
+    /// of up to n characters.
+    void cppstring::reserve(size_t in_requeted_capacity)
+    {
+        this->anvil.reserve(in_requeted_capacity);
+    }
+
     ///Convert the string to uppper case
     void cppstring::touppercase()
     {
@@ -66,25 +109,34 @@ namespace rathna
 
     ///Convert the string string to upper case and return
     ///in the parameter.
-    void cppstring::touppercase(cppstring& out_upper_string)
+    void cppstring::touppercase(cppstring& out_upper_string,
+                                rathna::cppstring::DESTINATION_STRING_MODIFICATION_TYPE in_modification_type_flag
+                                )
     {
         auto index = this->anvil.begin();
         auto end = this->anvil.end();
-        auto out_index = out_upper_string.begin();
+
+        if(in_modification_type_flag == rathna::cppstring::DESTINATION_STRING_MODIFICATION_TYPE::REPLACE)
+        {
+            // first clear out the out string
+            out_upper_string.clear();
+        }
+
+        //upfront reserve the space so as to reduce the memory allocation bottleneck
+        out_upper_string.reserve(this->length());
 
         // Convert to upper: clear the '32' bit, 0x20 in hex. And with the
         // inverted bit string (~).
         while(index != end)
         {
             if( *index >= (static_cast<unsigned char>('a'))
-                &&
-                *index <= (static_cast<unsigned char>('z'))
-              )
+                    &&
+                    *index <= (static_cast<unsigned char>('z'))
+                    )
             {
-                *out_index = (*index) & (~0x20);
+                out_upper_string.append(static_cast<unsigned char>((*index) & (~0x20)));
             }
 
-            ++out_index;
             ++index;
         }
     }
@@ -113,25 +165,34 @@ namespace rathna
 
     ///Convert the string string to lower case and return
     ///in the parameter.
-    void cppstring::tolowercase(cppstring& out_lower_string)
+    void cppstring::tolowercase(cppstring& out_lower_string,
+                                rathna::cppstring::DESTINATION_STRING_MODIFICATION_TYPE in_modification_type_flag
+                                )
     {
         auto index = this->anvil.begin();
         auto end = this->anvil.end();
-        auto out_index = out_lower_string.begin();
+
+        if(in_modification_type_flag == rathna::cppstring::DESTINATION_STRING_MODIFICATION_TYPE::REPLACE)
+        {
+            // first clear out the out string
+            out_lower_string.clear();
+        }
+
+        //upfront reserve the space so as to reduce the memory allocation bottleneck
+        out_lower_string.reserve(this->length());
 
         // Convert to upper: clear the '32' bit, 0x20 in hex. And with the
         // inverted bit string (~).
         while(index != end)
         {
             if( *index >= (static_cast<unsigned char>('a'))
-                &&
-                *index <= (static_cast<unsigned char>('z'))
-              )
+                    &&
+                    *index <= (static_cast<unsigned char>('z'))
+                    )
             {
-                *out_index = (*index) | (0x20);
+                out_lower_string.append(static_cast<unsigned char>((*index) | (0x20)));
             }
 
-            ++out_index;
             ++index;
         }
     }

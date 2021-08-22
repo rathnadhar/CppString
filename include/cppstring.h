@@ -33,7 +33,33 @@ namespace rathna
             std::string anvil;
 
         public:
+            enum DESTINATION_STRING_MODIFICATION_TYPE
+            {
+                REPLACE,
+                APPEND
+            };
+
             cppstring();
+
+            /// Set the string length to zero.
+            void clear();
+
+            /// First set all the character in the sting to 0x0
+            /// and then set the size of the string to zero.
+            /// This ensures that clear() does not leave arbitary code in the memory
+            void wipe();
+
+            /// Returns the number of characters in the string.
+            /// size_t is unsigned integer type
+            size_t length() const;
+
+            /// Requests that the buffer capacity be reserved for planned change in size to a length
+            /// of up to n characters.
+            void reserve(size_t in_requeted_capacity = 0);
+
+            /// Add string or char to the end of the string
+            /// The stirng size is increased accordingly.
+            void append(const char in_char);
 
             /// Convert the string to uppper case
             void touppercase();
@@ -41,14 +67,20 @@ namespace rathna
             /// Convert the string string to uppcase and return
             /// in the parameter.
             /// source string is unmodified.
-            void touppercase(cppstring& out_upper_string);
+            void touppercase(cppstring& out_upper_string,
+                             rathna::cppstring::DESTINATION_STRING_MODIFICATION_TYPE in_modification_type_flag =
+                                             rathna::cppstring::DESTINATION_STRING_MODIFICATION_TYPE::REPLACE
+                             );
 
             /// Convert the string to uppper case
             void tolowercase();
 
             /// Convert the string string to uppcase and return
             /// in the parameter.
-            void tolowercase(cppstring& out_lower_string);
+            void tolowercase(cppstring& out_lower_string,
+                             rathna::cppstring::DESTINATION_STRING_MODIFICATION_TYPE in_modification_type_flag =
+                                             rathna::cppstring::DESTINATION_STRING_MODIFICATION_TYPE::REPLACE
+                             );
 
             /// Declare the cppstring iterators
             typedef std::string::iterator       iterator;
