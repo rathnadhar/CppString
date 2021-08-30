@@ -27,6 +27,9 @@
 
 namespace rathna
 {
+    class cppstring;
+    using CPPSTRING_REF = cppstring& ;
+
     class CPPSTRING_EXPORT cppstring
     {
         private:
@@ -39,7 +42,15 @@ namespace rathna
                 APPEND
             };
 
+            /// Create a defult string object.
+            /// Only Gurantee: cppstring length is zero.
             cppstring();
+
+            /// Create a c'tor that is populated with chars (8bits), required number of times.
+            /// The character in_character is copied in_count number of times.
+            cppstring(const unsigned int in_count,
+                      const char         in_char
+                      );
 
             /// Set the string length to zero.
             void clear();
@@ -59,7 +70,7 @@ namespace rathna
 
             /// Add string or char to the end of the string
             /// The stirng size is increased accordingly.
-            void append(const char in_char);
+            CPPSTRING_REF append(const char in_char);
 
             /// Convert the string to uppper case
             void touppercase();
@@ -73,7 +84,7 @@ namespace rathna
                              );
 
             /// Convert the string to uppper case
-            void tolowercase();
+            CPPSTRING_REF tolowercase();
 
             /// Convert the string string to uppcase and return
             /// in the parameter.

@@ -32,6 +32,14 @@ namespace rathna
 
     }
 
+    cppstring::cppstring(const unsigned int in_count,
+                         const char         in_char
+                         )
+        : anvil(in_count,in_char)
+    {
+
+    }
+
     cppstring::iterator cppstring::begin()
     {
         return anvil.begin();
@@ -73,9 +81,10 @@ namespace rathna
 
     /// Add string or char to the end of the string
     /// The stirng size is increased accordingly.
-    void cppstring::append(const char in_char)
+    CPPSTRING_REF cppstring::append(const char in_char)
     {
         this->anvil.append(&in_char);
+        return *this;
     }
 
     /// Requests that the buffer capacity be reserved for planned change in size to a length
@@ -142,7 +151,7 @@ namespace rathna
     }
 
     ///Convert the string to lower case
-    void cppstring::tolowercase()
+    CPPSTRING_REF cppstring::tolowercase()
     {
         auto index = this->anvil.begin();
         auto end = this->anvil.end();
@@ -161,6 +170,8 @@ namespace rathna
 
             ++index;
         }
+
+        return *this;
     }
 
     ///Convert the string string to lower case and return
@@ -197,3 +208,4 @@ namespace rathna
         }
     }
 }
+
