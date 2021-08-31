@@ -40,6 +40,15 @@ namespace rathna
 
     }
 
+    cppstring::cppstring (const std::string& in_str,
+                          size_t in_pos,
+                          size_t in_length
+                          )
+        : anvil(in_str,in_pos,in_length)
+    {
+
+    }
+
     cppstring::iterator cppstring::begin()
     {
         return anvil.begin();

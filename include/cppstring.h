@@ -52,6 +52,17 @@ namespace rathna
                       const char         in_char
                       );
 
+            /// Copies the portion of str that begins at the
+            /// character position pos and
+            /// spans len characters
+            /// (or until the end of str, if either str is too short or if len is string::npos).
+            cppstring (const std::string& in_str,
+                       size_t in_pos,
+                       size_t in_length = std::string::npos
+                      );
+
+
+
             /// Set the string length to zero.
             void clear();
 
